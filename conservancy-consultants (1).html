@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verdant Conservancy Consultants</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --forest: #1a2e1a;
+  --moss: #2d4a2d;
+  --sage: #4a7c59;
+  --fern: #6aaa7a;
+  --ivory: #f4f0e6;
+  --bone: #e8e2d4;
+  --rust: #b5451b;
+  --gold: #c8952a;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--ivory); color: var(--forest); overflow-x: hidden; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.2rem 4rem;
+  background: rgba(26,46,26,0.92); backdrop-filter: blur(12px);
+  transition: padding 0.3s;
+}
+.nav-logo { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--ivory); letter-spacing: 0.03em; }
+.nav-logo span { color: var(--fern); }
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a { text-decoration: none; color: var(--bone); font-size: 0.85rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; transition: color 0.2s; }
+.nav-links a:hover { color: var(--fern); }
+.nav-cta { background: var(--fern); color: var(--forest) !important; padding: 0.5rem 1.4rem; border-radius: 2px; font-weight: 500 !important; transition: background 0.2s !important; }
+.nav-cta:hover { background: var(--sage); color: var(--ivory) !important; }
+
+/* ── HERO ── */
+.hero { position: relative; min-height: 100vh; overflow: hidden; display: flex; align-items: flex-end; }
+#hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+.hero-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(5,10,5,0.58) 0%, rgba(5,10,5,0.12) 50%, rgba(5,10,5,0) 100%); z-index: 1; }
+.hero-content {
+  position: relative; z-index: 2;
+  padding: 0 4rem 5rem;
+  max-width: 700px;
+}
+.hero-eyebrow {
+  font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--fern); margin-bottom: 1.5rem; font-weight: 500;
+  opacity: 0; animation: fadeUp 0.8s 0.3s forwards;
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3.2rem, 6vw, 6.5rem);
+  line-height: 1.0; color: var(--ivory); font-weight: 900; margin-bottom: 1.5rem;
+  opacity: 0; animation: fadeUp 0.9s 0.55s forwards;
+}
+.hero-title em { font-style: italic; color: var(--fern); }
+.hero-desc {
+  color: #a8c4a8; font-size: 1.05rem; line-height: 1.75; max-width: 480px; margin-bottom: 2.5rem; font-weight: 300;
+  opacity: 0; animation: fadeUp 0.9s 0.8s forwards;
+}
+.hero-actions { display: flex; gap: 1rem; align-items: center; opacity: 0; animation: fadeUp 0.9s 1s forwards; }
+.btn-primary {
+  display: inline-block; background: var(--fern); color: var(--forest); text-decoration: none;
+  padding: 0.9rem 2rem; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.08em;
+  text-transform: uppercase; border-radius: 2px; transition: background 0.2s, transform 0.2s;
+}
+.btn-primary:hover { background: #7dc48d; transform: translateY(-2px); }
+.btn-ghost {
+  display: inline-block; color: var(--bone); text-decoration: none;
+  padding: 0.9rem 2rem; font-size: 0.85rem; font-weight: 400; letter-spacing: 0.08em;
+  text-transform: uppercase; border: 1px solid rgba(255,255,255,0.25); border-radius: 2px; transition: border-color 0.2s, color 0.2s;
+}
+.btn-ghost:hover { border-color: var(--fern); color: var(--fern); }
+
+.hero-stats {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+  display: flex; padding: 1.5rem 4rem; gap: 4rem;
+  background: rgba(10,20,10,0.75); backdrop-filter: blur(6px);
+  border-top: 1px solid rgba(106,170,122,0.2);
+  opacity: 0; animation: fadeUp 0.9s 1.2s forwards;
+}
+.hero-stat h3 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--fern); font-weight: 700; }
+.hero-stat p { font-size: 0.72rem; color: #7a9e7a; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 0.2rem; font-weight: 300; }
+
+/* floating animals */
+.animal-float {
+  position: absolute; z-index: 1; opacity: 0.12; font-size: 3rem; pointer-events: none;
+  animation: floatAnimal linear infinite;
+}
+@keyframes floatAnimal {
+  0% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-18px) rotate(3deg); }
+  66% { transform: translateY(8px) rotate(-2deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+/* ── MARQUEE ── */
+.marquee-bar { background: var(--rust); padding: 0.8rem 0; overflow: hidden; white-space: nowrap; }
+.marquee-inner {
+  display: inline-block;
+  animation: marquee 30s linear infinite;
+  font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ivory); font-weight: 500;
+}
+.marquee-inner2 {
+  display: inline-block;
+  animation: marquee2 22s linear infinite;
+  font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.55); font-weight: 300;
+}
+@keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+@keyframes marquee2 { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+
+/* ── PARTICLE BG SECTIONS ── */
+.particle-section { position: relative; overflow: hidden; }
+.particle-section canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+.particle-section > *:not(canvas) { position: relative; z-index: 1; }
+
+/* ── SERVICES ── */
+.section-services { padding: 7rem 4rem; background: var(--ivory); }
+.section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; gap: 2rem; }
+.section-label { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--rust); margin-bottom: 0.75rem; font-weight: 500; }
+.section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 900; line-height: 1.1; color: var(--forest); }
+.section-title em { font-style: italic; color: var(--sage); }
+.section-intro { max-width: 360px; font-size: 0.95rem; line-height: 1.7; color: #4a5e4a; font-weight: 300; }
+
+.services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5px; background: #b8c8b8; }
+.service-card {
+  background: var(--ivory); padding: 2.5rem 2rem; position: relative; overflow: hidden;
+  transition: background 0.35s, transform 0.2s; cursor: default;
+}
+.service-card::before {
+  content: ''; position: absolute; bottom: -100%; left: 0; right: 0; height: 100%;
+  background: var(--forest);
+  transition: bottom 0.4s cubic-bezier(0.4,0,0.2,1);
+  z-index: 0;
+}
+.service-card:hover::before { bottom: 0; }
+.service-card > * { position: relative; z-index: 1; }
+.service-card:hover .service-name, .service-card:hover .service-desc { color: var(--ivory); }
+.service-card:hover .service-num { color: var(--fern); }
+.service-card:hover .service-icon { border-color: var(--fern); transform: scale(1.15) rotate(8deg); }
+.service-num { font-size: 0.72rem; letter-spacing: 0.2em; color: #8a9e8a; font-weight: 500; margin-bottom: 1.5rem; transition: color 0.35s; }
+.service-icon { width: 52px; height: 52px; border: 1px solid #b8c8b8; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; font-size: 1.5rem; color: var(--sage); transition: border-color 0.35s, transform 0.35s; }
+.service-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--forest); margin-bottom: 0.85rem; line-height: 1.25; transition: color 0.35s; }
+.service-desc { font-size: 0.88rem; line-height: 1.65; color: #4a5e4a; font-weight: 300; transition: color 0.35s; }
+
+/* reveal on scroll */
+.reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s, transform 0.7s; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+/* ── ABOUT ── */
+.section-about { display: grid; grid-template-columns: 1fr 1fr; min-height: 600px; }
+.about-image {
+  background: url('https://images.unsplash.com/photo-1549366021-9f761d450615?w=900&q=80') center/cover no-repeat;
+  position: relative; overflow: hidden;
+}
+.about-image::after {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(26,46,26,0.25);
+  transition: background 0.4s;
+}
+.about-image:hover::after { background: rgba(26,46,26,0.1); }
+.about-image .parallax-img {
+  position: absolute; inset: -10%;
+  background: url('https://images.unsplash.com/photo-1549366021-9f761d450615?w=900&q=80') center/cover;
+  transition: transform 0.1s linear;
+}
+.about-content { background: var(--forest); padding: 6rem 5rem; display: flex; flex-direction: column; justify-content: center; }
+.about-content .section-label { color: var(--fern); }
+.about-content .section-title { color: var(--ivory); }
+.about-body { font-size: 0.95rem; line-height: 1.8; color: #a8bfa8; margin: 1.5rem 0 2rem; font-weight: 300; }
+.about-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 2.5rem; }
+.pillar { border-left: 2px solid var(--fern); padding-left: 1rem; transition: border-color 0.2s; }
+.pillar:hover { border-color: var(--gold); }
+.pillar h4 { font-size: 0.85rem; font-weight: 500; color: var(--ivory); margin-bottom: 0.25rem; }
+.pillar p { font-size: 0.78rem; color: #7a9e7a; line-height: 1.5; font-weight: 300; }
+
+/* ── ANIMATED NATURE BG SECTION ── */
+.nature-bg-section {
+  position: relative; overflow: hidden;
+  background: var(--forest);
+  padding: 6rem 4rem; text-align: center;
+}
+#leaf-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+.nature-bg-content { position: relative; z-index: 1; }
+.nature-bg-content h2 { font-family: 'Playfair Display', serif; font-size: clamp(2rem,4vw,4rem); color: var(--ivory); font-weight: 900; line-height: 1.1; margin-bottom: 1.2rem; }
+.nature-bg-content h2 em { font-style: italic; color: var(--fern); }
+.nature-bg-content p { font-size: 1rem; color: #a8bfa8; max-width: 600px; margin: 0 auto 2.5rem; line-height: 1.75; font-weight: 300; }
+.fact-chips { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; margin-bottom: 2.5rem; }
+.fact-chip {
+  background: rgba(106,170,122,0.12); border: 1px solid rgba(106,170,122,0.35); color: var(--fern);
+  padding: 0.5rem 1.25rem; border-radius: 100px; font-size: 0.82rem; letter-spacing: 0.06em;
+  transition: background 0.2s, transform 0.2s;
+  animation: chipPulse 3s ease-in-out infinite;
+}
+.fact-chip:nth-child(2) { animation-delay: 0.4s; }
+.fact-chip:nth-child(3) { animation-delay: 0.8s; }
+.fact-chip:nth-child(4) { animation-delay: 1.2s; }
+.fact-chip:nth-child(5) { animation-delay: 1.6s; }
+@keyframes chipPulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+.fact-chip:hover { background: rgba(106,170,122,0.25); transform: scale(1.08) !important; }
+
+/* ── PROJECTS ── */
+.section-projects { padding: 7rem 4rem; background: var(--bone); }
+.projects-grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 280px 280px; gap: 4px; margin-top: 3rem;
+}
+.project-card { position: relative; overflow: hidden; cursor: pointer; border-radius: 3px; }
+.project-card:first-child { grid-row: span 2; }
+.project-bg { width: 100%; height: 100%; background-size: cover; background-position: center; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
+.project-card:hover .project-bg { transform: scale(1.07); }
+.project-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(10,20,10,0.88) 0%, rgba(10,20,10,0.05) 55%);
+  display: flex; flex-direction: column; justify-content: flex-end; padding: 1.75rem;
+  transition: background 0.3s;
+}
+.project-card:hover .project-overlay { background: linear-gradient(to top, rgba(10,20,10,0.92) 0%, rgba(10,20,10,0.15) 55%); }
+.project-tag { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fern); margin-bottom: 0.4rem; font-weight: 500; }
+.project-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--ivory); font-weight: 700; line-height: 1.2; transform: translateY(4px); transition: transform 0.3s; }
+.project-card:hover .project-name { transform: translateY(0); }
+.project-card:first-child .project-name { font-size: 1.6rem; }
+.project-arrow {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--fern); display: flex; align-items: center; justify-content: center;
+  margin-top: 0.75rem; opacity: 0; transform: translateY(8px); transition: opacity 0.3s, transform 0.3s; font-size: 0.85rem;
+}
+.project-card:hover .project-arrow { opacity: 1; transform: translateY(0); }
+
+/* ── CONTACT ── */
+.section-contact {
+  padding: 7rem 4rem; background: var(--forest);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start;
+  position: relative; overflow: hidden;
+}
+#contact-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+.section-contact > * { position: relative; z-index: 1; }
+.contact-left .section-label { color: var(--fern); }
+.contact-body { font-size: 0.95rem; line-height: 1.7; color: #a8bfa8; margin: 1.25rem 0 2.5rem; font-weight: 300; }
+.contact-details { list-style: none; }
+.contact-details li { display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: 1rem; font-size: 0.9rem; color: #a8bfa8; font-weight: 300; }
+.contact-details li span:first-child { color: var(--fern); font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 500; min-width: 60px; margin-top: 0.1rem; }
+.contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+.form-group label { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: #7a9e7a; font-weight: 500; }
+.form-group input, .form-group select, .form-group textarea {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: var(--ivory);
+  padding: 0.75rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 300;
+  border-radius: 2px; outline: none; transition: border-color 0.2s, background 0.2s;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--fern); background: rgba(106,170,122,0.07); }
+.form-group select option { background: var(--forest); }
+.form-group textarea { resize: vertical; min-height: 120px; }
+.btn-submit {
+  background: var(--fern); color: var(--forest); border: none; padding: 1rem 2.5rem;
+  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; border-radius: 2px; cursor: pointer; transition: background 0.2s, transform 0.2s;
+  align-self: flex-start; position: relative; overflow: hidden;
+}
+.btn-submit::after { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0); transition: background 0.2s; }
+.btn-submit:hover { background: #7dc48d; transform: translateY(-2px); }
+.btn-submit:active { transform: translateY(0); }
+
+/* ── FOOTER ── */
+footer { background: #0d1a0d; padding: 2.5rem 4rem; display: flex; justify-content: space-between; align-items: center; }
+.footer-logo { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--ivory); }
+.footer-logo span { color: var(--fern); }
+footer p { font-size: 0.78rem; color: #4a6a4a; font-weight: 300; letter-spacing: 0.05em; }
+.footer-links { display: flex; gap: 2rem; list-style: none; }
+.footer-links a { font-size: 0.75rem; color: #4a6a4a; text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+.footer-links a:hover { color: var(--fern); }
+
+@keyframes fadeUp { from { opacity:0; transform: translateY(24px); } to { opacity:1; transform: translateY(0); } }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--forest); }
+::-webkit-scrollbar-thumb { background: var(--fern); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <div class="nav-logo">Verdant <span>Conservancy</span></div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact" class="nav-cta">Get in Touch</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-overlay"></div>
+
+  <div class="animal-float" style="top:20%;left:8%;animation-duration:7s;animation-delay:0s;">🦒</div>
+  <div class="animal-float" style="top:15%;right:12%;animation-duration:9s;animation-delay:1.5s;font-size:2.2rem;">🐘</div>
+  <div class="animal-float" style="top:55%;right:6%;animation-duration:6s;animation-delay:0.7s;font-size:2rem;">🦅</div>
+  <div class="animal-float" style="top:35%;left:18%;animation-duration:11s;animation-delay:2s;font-size:1.8rem;">🌿</div>
+  <div class="animal-float" style="bottom:20%;left:5%;animation-duration:8s;animation-delay:3s;font-size:2.5rem;">🦁</div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Wildlife &amp; Biodiversity Consultancy</p>
+    <h1 class="hero-title">
+      Protecting<br>
+      <em>Nature's</em><br>
+      Legacy
+    </h1>
+    <p class="hero-desc">
+      Science-led conservation strategies that safeguard wildlife corridors, restore biodiversity, and build resilient ecosystems for generations to come.
+    </p>
+    <div class="hero-actions">
+      <a href="#services" class="btn-primary">Our Services</a>
+      <a href="#projects" class="btn-ghost">View Projects</a>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hero-stat"><h3 class="count-up" data-target="240000" data-suffix="K+">0</h3><p>Hectares Protected</p></div>
+    <div class="hero-stat"><h3 class="count-up" data-target="18" data-suffix="">0</h3><p>Countries Active</p></div>
+    <div class="hero-stat"><h3 class="count-up" data-target="130" data-suffix="+">0</h3><p>Species Monitored</p></div>
+    <div class="hero-stat"><h3 class="count-up" data-target="32" data-suffix="">0</h3><p>Years Experience</p></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-bar" aria-hidden="true" style="position:relative;">
+  <div style="overflow:hidden;padding:0.5rem 0;">
+    <span class="marquee-inner">🌍 Wildlife Corridor Planning &nbsp;·&nbsp; 🦁 Biodiversity Assessments &nbsp;·&nbsp; 🌱 Habitat Restoration &nbsp;·&nbsp; 📋 Conservation Policy &nbsp;·&nbsp; 🔭 Species Monitoring &nbsp;·&nbsp; 🤝 Community Engagement &nbsp;·&nbsp; 🌿 Ecosystem Resilience &nbsp;·&nbsp; 🐘 Wildlife Impact Studies &nbsp;·&nbsp; &nbsp; 🌍 Wildlife Corridor Planning &nbsp;·&nbsp; 🦁 Biodiversity Assessments &nbsp;·&nbsp; 🌱 Habitat Restoration &nbsp;·&nbsp; 📋 Conservation Policy &nbsp;·&nbsp; 🔭 Species Monitoring &nbsp;·&nbsp; 🤝 Community Engagement &nbsp;·&nbsp; 🌿 Ecosystem Resilience &nbsp;·&nbsp; 🐘 Wildlife Impact Studies &nbsp;·&nbsp;</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="section-services particle-section" id="services">
+  <canvas id="services-canvas"></canvas>
+  <div class="section-header reveal">
+    <div>
+      <p class="section-label">What We Do</p>
+      <h2 class="section-title">Expert<br><em>Conservation</em><br>Services</h2>
+    </div>
+    <p class="section-intro">From field assessments to policy frameworks, we deliver end-to-end solutions rooted in ecological science and community partnership.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal reveal-delay-1">
+      <p class="service-num">01</p>
+      <div class="service-icon">🦁</div>
+      <h3 class="service-name">Wildlife Corridor Planning</h3>
+      <p class="service-desc">Designing functional landscape linkages that allow wildlife to move freely across fragmented habitats, reducing isolation and genetic bottlenecks.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <p class="service-num">02</p>
+      <div class="service-icon">🌿</div>
+      <h3 class="service-name">Biodiversity Assessments</h3>
+      <p class="service-desc">Rigorous field surveys and remote-sensing analysis to establish baseline biodiversity inventories and track ecosystem health over time.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <p class="service-num">03</p>
+      <div class="service-icon">🌱</div>
+      <h3 class="service-name">Habitat Restoration</h3>
+      <p class="service-desc">Evidence-based native-species planting programmes and invasive removal strategies that rebuild degraded ecosystems from the ground up.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-4">
+      <p class="service-num">04</p>
+      <div class="service-icon">📋</div>
+      <h3 class="service-name">Conservation Policy &amp; Strategy</h3>
+      <p class="service-desc">Translating ecological science into actionable government policy, land-use frameworks, and conservancy management plans.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-5">
+      <p class="service-num">05</p>
+      <div class="service-icon">🔭</div>
+      <h3 class="service-name">Species Monitoring</h3>
+      <p class="service-desc">Camera-trap networks, acoustic monitoring, and DNA sampling programmes to track threatened species populations with precision.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <p class="service-num">06</p>
+      <div class="service-icon">🤝</div>
+      <h3 class="service-name">Community Conservation</h3>
+      <p class="service-desc">Structuring community conservancy models that align local livelihoods with long-term wildlife protection and benefit-sharing outcomes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section-about" id="about">
+  <div class="about-image">
+    <div class="parallax-img" id="parallax-img"></div>
+  </div>
+  <div class="about-content">
+    <p class="section-label reveal">Who We Are</p>
+    <h2 class="section-title reveal reveal-delay-1">Science,<br><em>Field Experience</em><br>&amp; Purpose</h2>
+    <p class="about-body reveal reveal-delay-2">
+      Verdant was founded by a team of wildlife ecologists, conservation biologists, and policy specialists who have spent decades working in some of Africa and Asia's most biodiverse landscapes.<br><br>
+      We don't offer off-the-shelf solutions. Every engagement starts in the field — understanding the land, the species, and the people who share it.
+    </p>
+    <a href="#contact" class="btn-primary reveal reveal-delay-3" style="width:fit-content;">Work With Us</a>
+    <div class="about-pillars">
+      <div class="pillar reveal reveal-delay-1"><h4>Science-Led</h4><p>Every recommendation grounded in peer-reviewed ecology and field data.</p></div>
+      <div class="pillar reveal reveal-delay-2"><h4>Community-First</h4><p>Conservation succeeds when local communities are genuine partners.</p></div>
+      <div class="pillar reveal reveal-delay-3"><h4>Long-Term Focus</h4><p>We build for 50-year outcomes, not short-cycle deliverables.</p></div>
+      <div class="pillar reveal reveal-delay-4"><h4>Transparent Reporting</h4><p>Rigorous monitoring and open data for all stakeholders.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ANIMATED NATURE INTERLUDE -->
+<div class="nature-bg-section">
+  <canvas id="leaf-canvas"></canvas>
+  <div class="nature-bg-content">
+    <h2 class="reveal">Every Species<br><em>Counts</em></h2>
+    <p class="reveal reveal-delay-1">Africa is home to some of the planet's most extraordinary biodiversity — and some of its most urgent conservation challenges. We work at the intersection of science, policy, and community to protect it all.</p>
+    <div class="fact-chips reveal reveal-delay-2">
+      <span class="fact-chip">🐆 Cheetah Recovery</span>
+      <span class="fact-chip">🐘 Elephant Corridors</span>
+      <span class="fact-chip">🦏 Rhino Protection</span>
+      <span class="fact-chip">🦒 Habitat Linkage</span>
+      <span class="fact-chip">🦅 Raptor Surveys</span>
+    </div>
+    <a href="#contact" class="btn-primary reveal reveal-delay-3">Start a Conversation</a>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<section class="section-projects" id="projects">
+  <div class="section-header reveal">
+    <div>
+      <p class="section-label">Our Work</p>
+      <h2 class="section-title">Featured<br><em>Projects</em></h2>
+    </div>
+    <p class="section-intro">Landscape-scale conservation initiatives across Sub-Saharan Africa and South Asia.</p>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card reveal">
+      <div class="project-bg" style="background-image:url('https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=900&q=80');"></div>
+      <div class="project-overlay">
+        <span class="project-tag">Kenya · Wildlife Corridor</span>
+        <h3 class="project-name">Amboseli–Tsavo Connectivity Corridor</h3>
+        <div class="project-arrow">→</div>
+      </div>
+    </div>
+    <div class="project-card reveal reveal-delay-1">
+      <div class="project-bg" style="background-image:url('https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=600&q=80');"></div>
+      <div class="project-overlay">
+        <span class="project-tag">Tanzania · Biodiversity</span>
+        <h3 class="project-name">Selous Miombo Restoration</h3>
+        <div class="project-arrow">→</div>
+      </div>
+    </div>
+    <div class="project-card reveal reveal-delay-2">
+      <div class="project-bg" style="background-image:url('https://images.unsplash.com/photo-1472396961693-142e6e269027?w=600&q=80');"></div>
+      <div class="project-overlay">
+        <span class="project-tag">Botswana · Community</span>
+        <h3 class="project-name">Okavango Community Conservancy</h3>
+        <div class="project-arrow">→</div>
+      </div>
+    </div>
+    <div class="project-card reveal reveal-delay-3">
+      <div class="project-bg" style="background-image:url('https://images.unsplash.com/photo-1604087388182-ec8c5a4c8e1f?w=600&q=80');"></div>
+      <div class="project-overlay">
+        <span class="project-tag">Namibia · Species Monitoring</span>
+        <h3 class="project-name">Cheetah Landscape Survey</h3>
+        <div class="project-arrow">→</div>
+      </div>
+    </div>
+    <div class="project-card reveal reveal-delay-4">
+      <div class="project-bg" style="background-image:url('https://images.unsplash.com/photo-1543946602-a0fce8117697?w=600&q=80');"></div>
+      <div class="project-overlay">
+        <span class="project-tag">Rwanda · Habitat</span>
+        <h3 class="project-name">Virunga Buffer Zone Plan</h3>
+        <div class="project-arrow">→</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section-contact" id="contact">
+  <canvas id="contact-canvas"></canvas>
+  <div class="contact-left">
+    <p class="section-label reveal">Get in Touch</p>
+    <h2 class="section-title reveal reveal-delay-1" style="color:var(--ivory);">Start a<br><em>Conversation</em></h2>
+    <p class="contact-body reveal reveal-delay-2">Whether you're a landowner, NGO, government agency, or investor, we'd love to hear about the conservation challenge you're facing.</p>
+    <ul class="contact-details reveal reveal-delay-3">
+      <li><span>Email</span><span>info@verdantconservancy.org</span></li>
+      <li><span>Phone</span><span>+254 20 123 4567</span></li>
+      <li><span>Office</span><span>Karen, Nairobi, Kenya</span></li>
+      <li><span>Field</span><span>East &amp; Southern Africa · South Asia</span></li>
+    </ul>
+  </div>
+  <form class="contact-form reveal reveal-delay-2" onsubmit="handleSubmit(event)">
+    <div class="form-row">
+      <div class="form-group"><label for="fname">First Name</label><input type="text" id="fname" placeholder="Sarah" /></div>
+      <div class="form-group"><label for="lname">Last Name</label><input type="text" id="lname" placeholder="Kimani" /></div>
+    </div>
+    <div class="form-group"><label for="email">Email Address</label><input type="email" id="email" placeholder="sarah@organisation.org" /></div>
+    <div class="form-group"><label for="org">Organisation</label><input type="text" id="org" placeholder="Your organisation name" /></div>
+    <div class="form-group">
+      <label for="service">Area of Interest</label>
+      <select id="service">
+        <option value="">Select a service...</option>
+        <option>Wildlife Corridor Planning</option>
+        <option>Biodiversity Assessment</option>
+        <option>Habitat Restoration</option>
+        <option>Conservation Policy</option>
+        <option>Species Monitoring</option>
+        <option>Community Conservation</option>
+        <option>Other / Multiple</option>
+      </select>
+    </div>
+    <div class="form-group"><label for="message">Message</label><textarea id="message" placeholder="Tell us about your project or challenge..."></textarea></div>
+    <button type="submit" class="btn-submit">Send Enquiry</button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Verdant <span>Conservancy</span></div>
+  <p>© 2025 Verdant Conservancy Consultants. All rights reserved.</p>
+  <ul class="footer-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</footer>
+
+<script>
+/* ── NAV SHRINK ── */
+const nav = document.getElementById('main-nav');
+window.addEventListener('scroll', () => {
+  nav.style.padding = window.scrollY > 60 ? '0.7rem 4rem' : '1.2rem 4rem';
+});
+
+/* ── HERO CANVAS: dramatic animated savanna landscape ── */
+(function() {
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, t = 0;
+
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Stars
+  const stars = Array.from({length: 180}, () => ({
+    x: Math.random(), y: Math.random() * 0.6,
+    r: Math.random() * 1.4 + 0.3,
+    twinkle: Math.random() * Math.PI * 2,
+    speed: Math.random() * 0.03 + 0.01
+  }));
+
+  // Birds (V-shape flock)
+  const birds = Array.from({length: 14}, (_, i) => ({
+    ox: (i % 2 === 0 ? i : -i) * 22,
+    oy: Math.floor(i / 2) * 10,
+    wingPhase: Math.random() * Math.PI * 2,
+    wingSpeed: Math.random() * 0.08 + 0.06
+  }));
+  let flockX = -100, flockY = 0;
+
+  // Fireflies
+  const fireflies = Array.from({length: 35}, () => ({
+    x: Math.random(), y: 0.55 + Math.random() * 0.3,
+    phase: Math.random() * Math.PI * 2,
+    speed: Math.random() * 0.008 + 0.003,
+    dx: (Math.random() - 0.5) * 0.0008,
+    dy: (Math.random() - 0.5) * 0.0004
+  }));
+
+  function drawSky(progress) {
+    // Deep twilight sky gradient — rich purples, indigos, warm horizon
+    const sky = ctx.createLinearGradient(0, 0, 0, H * 0.68);
+    sky.addColorStop(0,   '#0a0a1a');
+    sky.addColorStop(0.2, '#0f1a2e');
+    sky.addColorStop(0.5, '#1a2a18');
+    sky.addColorStop(0.75,'#3d2a08');
+    sky.addColorStop(1,   '#8b4513');
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, W, H * 0.7);
+  }
+
+  function drawAurora() {
+    // Three sweeping aurora bands
+    const bands = [
+      { color1: 'rgba(60,160,80,0)', color2: 'rgba(60,160,80,0.18)', color3: 'rgba(60,160,80,0)', offset: 0 },
+      { color1: 'rgba(30,120,180,0)', color2: 'rgba(30,120,180,0.12)', color3: 'rgba(30,120,180,0)', offset: 0.4 },
+      { color1: 'rgba(180,100,30,0)', color2: 'rgba(180,100,30,0.15)', color3: 'rgba(180,100,30,0)', offset: 0.7 },
+    ];
+    bands.forEach((b, i) => {
+      const waveY = H * (0.18 + i * 0.1) + Math.sin(t * 0.4 + b.offset * 5) * H * 0.04;
+      const waveH = H * 0.18 + Math.sin(t * 0.3 + i) * H * 0.03;
+      const g = ctx.createLinearGradient(0, waveY - waveH/2, 0, waveY + waveH/2);
+      g.addColorStop(0, b.color1); g.addColorStop(0.5, b.color2); g.addColorStop(1, b.color3);
+      ctx.save();
+      ctx.beginPath();
+      // wavy band using bezier
+      const pts = 8;
+      ctx.moveTo(0, waveY + Math.sin(t * 0.5) * 20);
+      for (let p = 0; p <= pts; p++) {
+        const px = (p / pts) * W;
+        const py = waveY + Math.sin(t * 0.6 + p * 0.9 + b.offset * 3) * 28;
+        ctx.lineTo(px, py);
+      }
+      for (let p = pts; p >= 0; p--) {
+        const px = (p / pts) * W;
+        const py = waveY + waveH + Math.sin(t * 0.5 + p * 1.1 + b.offset * 2) * 20;
+        ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.fillStyle = g;
+      ctx.fill();
+      ctx.restore();
+    });
+  }
+
+  function drawSun() {
+    // Large glowing setting sun on the horizon
+    const sx = W * (0.62 + Math.sin(t * 0.05) * 0.01);
+    const sy = H * 0.52;
+    // outer glow rings
+    for (let r = 140; r > 0; r -= 18) {
+      ctx.beginPath();
+      ctx.arc(sx, sy, r, 0, Math.PI * 2);
+      const a = (1 - r/140) * 0.12;
+      ctx.fillStyle = `rgba(220,130,30,${a})`;
+      ctx.fill();
+    }
+    // sun disk
+    const sunGrad = ctx.createRadialGradient(sx, sy, 0, sx, sy, 52);
+    sunGrad.addColorStop(0, '#fff8e0');
+    sunGrad.addColorStop(0.3, '#ffcc44');
+    sunGrad.addColorStop(0.7, '#e8751a');
+    sunGrad.addColorStop(1, 'rgba(200,80,10,0)');
+    ctx.beginPath();
+    ctx.arc(sx, sy, 52, 0, Math.PI * 2);
+    ctx.fillStyle = sunGrad;
+    ctx.fill();
+
+    // sun reflection on ground
+    const refGrad = ctx.createLinearGradient(sx - 60, sy, sx + 60, H * 0.72);
+    refGrad.addColorStop(0, 'rgba(220,130,30,0.22)');
+    refGrad.addColorStop(1, 'rgba(220,130,30,0)');
+    ctx.save();
+    ctx.beginPath();
+    ctx.ellipse(sx, H * 0.66, 80 + Math.sin(t*0.3)*10, 18, 0, 0, Math.PI * 2);
+    ctx.fillStyle = refGrad;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawStars() {
+    stars.forEach(s => {
+      s.twinkle += s.speed;
+      const a = 0.4 + 0.5 * Math.sin(s.twinkle);
+      ctx.beginPath();
+      ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,230,${a})`;
+      ctx.fill();
+    });
+  }
+
+  function drawHorizonGlow() {
+    const g = ctx.createLinearGradient(0, H * 0.45, 0, H * 0.72);
+    g.addColorStop(0, 'rgba(220,100,20,0)');
+    g.addColorStop(0.4, 'rgba(200,80,15,0.35)');
+    g.addColorStop(0.7, 'rgba(160,60,10,0.5)');
+    g.addColorStop(1, 'rgba(80,30,5,0.7)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, H * 0.45, W, H * 0.27);
+  }
+
+  function drawGround() {
+    const g = ctx.createLinearGradient(0, H * 0.68, 0, H);
+    g.addColorStop(0, '#1a0d04');
+    g.addColorStop(0.3, '#0f0a04');
+    g.addColorStop(1, '#060402');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, H * 0.68, W, H * 0.32);
+  }
+
+  function drawAcacia(x, y, trunkH, spread, flip) {
+    ctx.save();
+    ctx.fillStyle = '#0a0603';
+    ctx.strokeStyle = '#0a0603';
+    ctx.lineWidth = 3;
+    // trunk
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + (flip ? 4 : -4), y - trunkH * 0.55);
+    ctx.lineTo(x + (flip ? 6 : -6), y - trunkH);
+    ctx.stroke();
+    // flat canopy — acacia shape
+    const canopyY = y - trunkH - 4;
+    ctx.beginPath();
+    ctx.ellipse(x + (flip ? spread*0.15 : -spread*0.15), canopyY, spread, spread * 0.25, 0, 0, Math.PI * 2);
+    ctx.fill();
+    // second smaller lobe
+    ctx.beginPath();
+    ctx.ellipse(x + (flip ? -spread*0.25 : spread*0.25), canopyY + 4, spread * 0.6, spread * 0.18, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawMountains() {
+    // distant mountain silhouette
+    ctx.save();
+    ctx.fillStyle = 'rgba(15,25,12,0.7)';
+    ctx.beginPath();
+    ctx.moveTo(0, H * 0.72);
+    const mpts = [[0.05,0.58],[0.12,0.52],[0.18,0.62],[0.27,0.49],[0.35,0.56],[0.42,0.47],[0.52,0.54],[0.6,0.51],[0.68,0.59],[0.76,0.53],[0.84,0.61],[0.92,0.56],[1,0.63],[1,0.72]];
+    mpts.forEach(([mx,my]) => ctx.lineTo(mx*W, my*H));
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawTerrain() {
+    // rolling savanna ground
+    ctx.save();
+    ctx.fillStyle = '#0d0804';
+    ctx.beginPath();
+    ctx.moveTo(0, H * 0.72);
+    const tpts = [[0,0.73],[0.1,0.71],[0.22,0.705],[0.35,0.72],[0.5,0.715],[0.65,0.72],[0.78,0.71],[0.9,0.715],[1,0.72],[1,1],[0,1]];
+    tpts.forEach(([tx,ty]) => ctx.lineTo(tx*W, ty*H));
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawGrass() {
+    // animated grass blades along horizon
+    ctx.save();
+    const baseY = H * 0.715;
+    ctx.strokeStyle = 'rgba(40,28,8,0.9)';
+    for (let i = 0; i < 80; i++) {
+      const gx = (i / 80) * W + Math.sin(i * 7.3) * 12;
+      const gh = 8 + Math.sin(i * 3.1) * 6;
+      const sway = Math.sin(t * 1.2 + i * 0.4) * 3;
+      ctx.lineWidth = 0.8 + Math.random() * 0.4;
+      ctx.beginPath();
+      ctx.moveTo(gx, baseY + 2);
+      ctx.quadraticCurveTo(gx + sway * 0.5, baseY - gh * 0.5, gx + sway, baseY - gh);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawBirds() {
+    flockX += 0.55;
+    if (flockX > W + 200) flockX = -200;
+    flockY = H * 0.3 + Math.sin(t * 0.4) * 30;
+
+    ctx.save();
+    ctx.strokeStyle = 'rgba(240,220,180,0.85)';
+    ctx.lineWidth = 1.5;
+    birds.forEach((b, i) => {
+      b.wingPhase += b.wingSpeed;
+      const bx = flockX + b.ox + Math.sin(t * 0.3 + i * 0.5) * 4;
+      const by = flockY + b.oy + Math.cos(t * 0.4 + i * 0.3) * 3;
+      const wingFlap = Math.sin(b.wingPhase) * 5;
+      ctx.beginPath();
+      ctx.moveTo(bx - 8, by + wingFlap);
+      ctx.quadraticCurveTo(bx, by - 3, bx + 8, by + wingFlap);
+      ctx.stroke();
+    });
+    ctx.restore();
+  }
+
+  function drawFireflies() {
+    fireflies.forEach(f => {
+      f.phase += f.speed;
+      f.x += f.dx; f.y += f.dy;
+      if (f.x < 0) f.x = 1; if (f.x > 1) f.x = 0;
+      if (f.y < 0.5) f.y = 0.5; if (f.y > 0.85) f.y = 0.85;
+      const a = 0.3 + 0.7 * Math.abs(Math.sin(f.phase));
+      const fx = f.x * W, fy = f.y * H;
+      const ffg = ctx.createRadialGradient(fx, fy, 0, fx, fy, 6);
+      ffg.addColorStop(0, `rgba(200,255,140,${a})`);
+      ffg.addColorStop(1, 'rgba(150,220,80,0)');
+      ctx.beginPath();
+      ctx.arc(fx, fy, 6, 0, Math.PI * 2);
+      ctx.fillStyle = ffg;
+      ctx.fill();
+    });
+  }
+
+  function drawLightRays() {
+    const sx = W * 0.62;
+    const sy = H * 0.52;
+    ctx.save();
+    for (let i = 0; i < 10; i++) {
+      const angle = -Math.PI * 0.6 + (i / 9) * Math.PI * 0.5 + Math.sin(t * 0.2 + i * 0.4) * 0.04;
+      const len = H * 0.9;
+      const rayA = 0.03 + 0.025 * Math.sin(t * 0.5 + i * 1.1);
+      ctx.save();
+      ctx.translate(sx, sy);
+      ctx.rotate(angle);
+      const rg = ctx.createLinearGradient(0, 0, 0, len);
+      rg.addColorStop(0, `rgba(255,180,60,${rayA * 1.5})`);
+      rg.addColorStop(0.4, `rgba(255,140,30,${rayA})`);
+      rg.addColorStop(1, 'rgba(200,80,10,0)');
+      ctx.fillStyle = rg;
+      ctx.beginPath();
+      ctx.moveTo(-6, 0);
+      ctx.lineTo(6, 0);
+      ctx.lineTo(28, len);
+      ctx.lineTo(-28, len);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  function frame() {
+    t += 0.012;
+    ctx.clearRect(0, 0, W, H);
+
+    drawSky();
+    drawStars();
+    drawAurora();
+    drawLightRays();
+    drawSun();
+    drawHorizonGlow();
+    drawMountains();
+    drawTerrain();
+    drawGround();
+    drawGrass();
+
+    // Acacia trees along horizon
+    drawAcacia(W * 0.06, H * 0.722, 55, 40, false);
+    drawAcacia(W * 0.11, H * 0.718, 70, 52, true);
+    drawAcacia(W * 0.16, H * 0.724, 42, 32, false);
+    drawAcacia(W * 0.72, H * 0.720, 80, 60, false);
+    drawAcacia(W * 0.78, H * 0.716, 55, 44, true);
+    drawAcacia(W * 0.84, H * 0.722, 65, 50, false);
+    drawAcacia(W * 0.90, H * 0.718, 45, 35, true);
+    drawAcacia(W * 0.95, H * 0.724, 72, 54, false);
+    // single tall centre-left tree
+    drawAcacia(W * 0.38, H * 0.714, 95, 70, false);
+
+    drawFireflies();
+    drawBirds();
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+
+  // mouse parallax — shift sun & aurora slightly
+  let mx = 0, my = 0;
+  document.getElementById('hero').addEventListener('mousemove', e => {
+    mx = (e.clientX / window.innerWidth - 0.5) * 2;
+    my = (e.clientY / window.innerHeight - 0.5) * 2;
+    fireflies.forEach(f => { f.x += mx * 0.0003; f.y += my * 0.0002; });
+  });
+})();
+
+/* ── SERVICES CANVAS: drifting dots ── */
+(function() {
+  const canvas = document.getElementById('services-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, dots = [];
+  function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  for (let i = 0; i < 40; i++) dots.push({ x: Math.random()*W, y: Math.random()*H, r: Math.random()*4+1, vx: (Math.random()-0.5)*0.2, vy: (Math.random()-0.5)*0.2 });
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    dots.forEach(d => {
+      d.x += d.vx; d.y += d.vy;
+      if (d.x < 0 || d.x > W) d.vx *= -1;
+      if (d.y < 0 || d.y > H) d.vy *= -1;
+      ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(74,124,89,0.07)'; ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ── LEAF CANVAS: falling leaves in interlude ── */
+(function() {
+  const canvas = document.getElementById('leaf-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const LEAVES = ['🍃','🌿','🍀','🌱','🍂'];
+  const leaves = Array.from({length: 28}, () => ({
+    x: Math.random() * W,
+    y: Math.random() * H - H,
+    size: Math.random() * 20 + 12,
+    speed: Math.random() * 1.2 + 0.4,
+    drift: (Math.random() - 0.5) * 0.6,
+    rot: Math.random() * Math.PI * 2,
+    rotSpeed: (Math.random() - 0.5) * 0.04,
+    emoji: LEAVES[Math.floor(Math.random() * LEAVES.length)],
+    alpha: Math.random() * 0.5 + 0.15
+  }));
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    leaves.forEach(l => {
+      l.y += l.speed;
+      l.x += l.drift;
+      l.rot += l.rotSpeed;
+      if (l.y > H + 30) { l.y = -30; l.x = Math.random() * W; }
+      ctx.save();
+      ctx.globalAlpha = l.alpha;
+      ctx.translate(l.x, l.y);
+      ctx.rotate(l.rot);
+      ctx.font = l.size + 'px serif';
+      ctx.fillText(l.emoji, -l.size/2, l.size/2);
+      ctx.restore();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ── CONTACT CANVAS: slow orbiting rings ── */
+(function() {
+  const canvas = document.getElementById('contact-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, t = 0;
+  function resize() { W = canvas.width = canvas.offsetWidth; H = canvas.height = canvas.offsetHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    t += 0.004;
+    const cx = W * 0.75, cy = H * 0.5;
+    for (let i = 0; i < 5; i++) {
+      const r = 80 + i * 65;
+      ctx.beginPath();
+      ctx.arc(cx + Math.cos(t + i * 0.7) * 10, cy + Math.sin(t * 0.8 + i * 0.5) * 10, r, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(106,170,122,${0.06 - i * 0.01})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+    // small dots on rings
+    for (let i = 0; i < 5; i++) {
+      const r = 80 + i * 65;
+      const angle = t * (1 + i * 0.3);
+      const px = cx + Math.cos(t + i*0.7)*10 + Math.cos(angle) * r;
+      const py = cy + Math.sin(t*0.8 + i*0.5)*10 + Math.sin(angle) * r;
+      ctx.beginPath();
+      ctx.arc(px, py, 3, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(106,170,122,${0.35 - i * 0.05})`;
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ── PARALLAX IMAGE ── */
+const parallaxImg = document.getElementById('parallax-img');
+window.addEventListener('scroll', () => {
+  const section = document.querySelector('.section-about');
+  const rect = section.getBoundingClientRect();
+  const progress = -rect.top / (rect.height + window.innerHeight);
+  if (parallaxImg) parallaxImg.style.transform = `translateY(${progress * 40}px)`;
+});
+
+/* ── SCROLL REVEAL ── */
+const revealEls = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+}, { threshold: 0.12 });
+revealEls.forEach(el => revealObs.observe(el));
+
+/* ── COUNT UP ANIMATION ── */
+function animateCount(el) {
+  const target = parseInt(el.dataset.target);
+  const suffix = el.dataset.suffix || '';
+  const isLarge = target > 999;
+  const duration = 2000;
+  const start = performance.now();
+  function step(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const val = Math.floor(eased * target);
+    if (isLarge) {
+      el.textContent = Math.floor(val / 1000) + 'K' + suffix;
+    } else {
+      el.textContent = val + suffix;
+    }
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+const countEls = document.querySelectorAll('.count-up');
+const countObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { animateCount(e.target); countObs.unobserve(e.target); } });
+}, { threshold: 0.5 });
+countEls.forEach(el => countObs.observe(el));
+
+/* ── FORM SUBMIT ── */
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('.btn-submit');
+  btn.textContent = '✓ Sent! We\'ll be in touch.';
+  btn.style.background = '#4a7c59';
+  btn.disabled = true;
+}
+</script>
+</body>
+</html>
